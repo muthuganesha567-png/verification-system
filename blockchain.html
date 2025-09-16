@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blockchain View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .nav {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .block {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .block-index {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .block-timestamp {
+            color: #7f8c8d;
+        }
+        .block-hash {
+            font-family: monospace;
+            word-break: break-all;
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .transaction {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        .transaction-details {
+            margin: 5px 0;
+        }
+        .file-hash {
+            font-family: monospace;
+            word-break: break-all;
+            background-color: #e8f4fc;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .empty-block {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('admin_login') }}">Admin</a>
+            <a href="{{ url_for('user') }}">User Verification</a>
+            <a href="{{ url_for('history') }}">History</a>
+            <a href="{{ url_for('view_blockchain') }}">View Blockchain</a>
+        </div>
+
+        <h1>Certificate Verification Blockchain</h1>
+        <p style="text-align: center; color: #7f8c8d;">
+            This blockchain contains an immutable record of all verified certificates.
+        </p>
+        
+        {% for block in chain %}
+        <div class="block">
+            <div class="block-header">
+                <span class="block-index">Block #{{ block.index }}</span>
+                <span class="block-timestamp">{{ block.timestamp | ctime }}</span>
+            </div>
+            
+            <div class="block-details">
+                <p><strong>Previous Hash:</strong></p>
+                <div class="block-hash">{{ block.previous_hash }}</div>
+                
+                <p><strong>Proof:</strong> {{ block.proof }}</p>
+                
+                <h3>Transactions ({{ block.transactions | length }}):</h3>
+                
+                {% if block.transactions %}
+                    {% for transaction in block.transactions %}
+                    <div class="transaction">
+                        <div class="transaction-details">
+                            <p><strong>College Code:</strong> {{ transaction.college_code }}</p>
+                            <p><strong>Document:</strong> {{ transaction.document_name }}</p>
+                            <p><strong>File Hash (SHA-256):</strong></p>
+                            <div class="file-hash">{{ transaction.file_hash }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-block">No transactions in this block</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        
+        {% if not chain %}
+        <div class="block">
+            <div class="empty-block">No blocks in the blockchain yet</div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

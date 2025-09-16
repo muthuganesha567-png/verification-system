@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Certificate Verification System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --accent: #f39c12;
+            --light: #f5f7fa;
+            --white: #ffffff;
+            --gradient-start: #3494E6;
+            --gradient-end: #2c3e50;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+        
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 30px;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 0 30px;
+            position: relative;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background: linear-gradient(145deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .logo i {
+            font-size: 50px;
+            color: white;
+        }
+        
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1.5px;
+            transform: translateZ(50px);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+            transform: translateZ(30px);
+        }
+        
+        .nav-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            transform: translateZ(20px);
+            animation: glow 4s infinite alternate;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .nav a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            padding: 15px 30px;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            background: linear-gradient(145deg, var(--primary-dark), var(--primary));
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transform: translateZ(30px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav a:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .nav a:hover:before {
+            left: 100%;
+        }
+        
+        .nav a:hover {
+            transform: translateY(-5px) translateZ(40px) rotateX(10deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+        }
+        
+        .nav a i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .content {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 50px;
+            margin-bottom: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            transform: translateZ(10px);
+        }
+        
+        .welcome-title {
+            color: var(--white);
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 20px;
+            transform: translateZ(40px);
+        }
+        
+        .welcome-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+        
+        .welcome-text {
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.8;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+            transform: translateZ(30px);
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            perspective: 1000px;
+        }
+        
+        .feature {
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            background: var(--card-bg);
+            padding: 35px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform-style: preserve-3d;
+            transform: translateZ(20px);
+        }
+        
+        .feature:hover {
+            transform: translateY(-10px) translateZ(30px) rotateY(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--primary), var(--accent));
+            color: white;
+            font-size: 2.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateZ(40px);
+        }
+        
+        .feature h3 {
+            color: var(--white);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            transform: translateZ(30px);
+        }
+        
+        .feature p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            transform: translateZ(25px);
+        }
+        
+        .blockchain-badge {
+            display: inline-block;
+            background: linear-gradient(145deg, var(--accent), #e74c3c);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            margin-left: 10px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateZ(20px);
+        }
+        
+        .floating-certificate {
+            position: absolute;
+            width: 200px;
+            height: 150px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 10px;
+            transform-style: preserve-3d;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            z-index: -1;
+        }
+        
+        .floating-certificate:before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+        
+        .floating-certificate i {
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .cert-1 {
+            top: 15%;
+            left: 10%;
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        .cert-2 {
+            top: 20%;
+            right: 12%;
+            animation: float 18s ease-in-out infinite reverse;
+        }
+        
+        .cert-3 {
+            bottom: 20%;
+            left: 12%;
+            animation: float 12s ease-in-out infinite;
+        }
+        
+        .cert-4 {
+            bottom: 15%;
+            right: 10%;
+            animation: float 16s ease-in-out infinite reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg) translateZ(20px);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg) translateZ(30px);
+            }
+        }
+        
+        @keyframes glow {
+            0% {
+                box-shadow: 0 20px 40px rgba(52, 152, 219, 0.2);
+            }
+            100% {
+                box-shadow: 0 20px 40px rgba(243, 156, 18, 0.3);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav a {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .features {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .feature {
+                width: 100%;
+            }
+            
+            .floating-certificate {
+                display: none;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            transform: translateZ(10px);
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="floating-certificate cert-1">
+        <i class="fas fa-certificate"></i>
+    </div>
+    <div class="floating-certificate cert-2">
+        <i class="fas fa-award"></i>
+    </div>
+    <div class="floating-certificate cert-3">
+        <i class="fas fa-diploma"></i>
+    </div>
+    <div class="floating-certificate cert-4">
+        <i class="fas fa-medal"></i>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-certificate"></i>
+            </div>
+            <h1>Certificate Verification System</h1>
+            <p class="subtitle">Secure, transparent, and tamper-proof academic credential verification using blockchain technology</p>
+        </header>
+        
+        <div class="nav-container">
+            <div class="nav">
+                <a href="{{ url_for('admin_login') }}">
+                    <i class="fas fa-lock"></i> Admin Login
+                </a>
+                <a href="{{ url_for('user') }}">
+                    <i class="fas fa-check-circle"></i> Verify Certificates
+                </a>
+                <a href="{{ url_for('developer') }}">
+                    <i class="fas fa-code"></i> Developer
+                </a>
+            </div>
+        </div>
+        
+        <div class="content">
+            <h2 class="welcome-title">Welcome to our Secure Certificate Verification System</h2>
+            <p class="welcome-text">This platform allows educational institutions to securely upload and verify academic certificates using blockchain technology for tamper-proof record keeping.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Admin Portal</h3>
+                    <p>Authorized administrators can upload certificates with secure blockchain verification.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>User Verification</h3>
+                    <p>Verify the authenticity of certificates using our secure verification system.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3>Blockchain Technology <span class="blockchain-badge">Secure</span></h3>
+                    <p>All certificates are securely stored on a blockchain for immutability and transparency.</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Certificate Verification System | Secure • Reliable • Innovative</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Particles.js initialization
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.2, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#3498db",
+                    opacity: 0.1,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "grab" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+        
+        // Add subtle animation to elements on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const features = document.querySelectorAll('.feature');
+            const navItems = document.querySelectorAll('.nav a');
+            
+            features.forEach((feature, index) => {
+                feature.style.opacity = '0';
+                feature.style.transform = 'translateY(30px) translateZ(20px)';
+                
+                setTimeout(() => {
+                    feature.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    feature.style.opacity = '1';
+                    feature.style.transform = 'translateY(0) translateZ(20px)';
+                }, 300 + (index * 200));
+            });
+            
+            navItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px) translateZ(30px)';
+                
+                setTimeout(() => {
+                    item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0) translateZ(30px)';
+                }, 500 + (index * 150));
+            });
+        });
+    </script>
+</body>
+</html>

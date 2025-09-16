@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verification Failed</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .error-panel {
+            margin: 80px auto;
+            max-width: 500px;
+            background: #314b5f;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.19);
+            color: #fff;
+            text-align: center;
+        }
+        .error-icon {
+            font-size: 48px;
+            color: #ff555a;
+            margin-bottom: 20px;
+        }
+        .btn-try-again {
+            margin-top: 24px;
+            width: 90%;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<div class="error-panel">
+    <div class="error-icon">&#10060;</div>
+    <h3 style="color:#ff555a;">Verification Failed!</h3>
+    <p>The information provided does not match our records.<br>
+        Please check your details and try again.</p>
+    <a href="{{ url_for('user') }}" class="btn btn-danger btn-try-again">Try Again</a>
+</div>
+</body>
+</html>
